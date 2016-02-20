@@ -1,10 +1,17 @@
 # Replace the Project name
 PROJECT = Blink
 
+# ICDI port
+ICDI    = /dev/ttyACM0
+
 # Source code related information
 SOURCE  = ./src/
 INCLUDE = ./inc/
 LINKER_SCRIPT = ./.msc/scatter.ld
+FLASH   = ./.msc/lm4flash.c
+FLASH_TOOL = lm4flash
+
+
 
 # Part specific information
 PART    ?= TM4C123GH6PM
@@ -38,4 +45,12 @@ $(PROJECT).axf: $(patsubst %.c, %.o, $(wildcard $(SOURCE)*.c))
 
 %.o: %.c
 	@arm-none-eabi-gcc ${CFLAGS} -I$(INCLUDE) -Dgcc -DPART_${PART} -DTARGET_IS_${TARGET} -DUART_BUFFERED -MD -c -o $@ $<
-
+	
+flash: $(PROJECT).axf
+	@echo "Building the flash tool ..."
+	@gcc -Wall $(shell pkg-config --cflags libusb-1.0) $(FLASH) $(shell pkg-config --libs libusb-1.0) -o $(FLASH_TOOL)
+	@echo "Uploading the Binary to the Board ..."
+	@./$(FLASH_TOOL) -E -S $(ICDI) $(PROJECT).axf
+	@echo "Removing the flash tool"
+	@rm -rf $(FLASH_TOOL)
+	@echo "Done! :)"

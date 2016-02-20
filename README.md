@@ -11,15 +11,15 @@ In order to use the build system correctly you will need to have ARM GNU tool ch
 - Add header (.h) files in the **inc** folder.
 - Please Modify the **PROJECT** and **ICDI** variables in the **Makefile** as per your needs or system configuration.
 - Using the following will generate the binary file only!
-``` sh
+``` 
 $ make
 ```
 - In order to upload the code to board use the following:
-``` sh
+``` 
 $ sudo make flash
 ```
 - To clean the source code use:
-``` sh
+``` 
 $ make clean
 ```
 

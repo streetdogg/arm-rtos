@@ -54,3 +54,12 @@ flash: $(PROJECT).axf
 	@echo "Removing the flash tool"
 	@rm -rf $(FLASH_TOOL)
 	@echo "Done! :)"
+
+setup_openocd:
+	@.msc/setup_openocd.sh
+
+openocd:
+	@openocd --file /usr/local/share/openocd/scripts/board/ek-lm4f120xl.cfg
+
+debug: $(PROJECT).axf
+	@arm-none-eabi-gdb $(PROJECT).axf

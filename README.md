@@ -23,16 +23,47 @@ $ sudo make flash
 $ make clean
 ```
 
+# OpenOCD
+OpenOCD can be used for debugging. To install OpenOCD (if you don't already have) use the following command:
+```
+$ sudo make setup_openocd
+```
+This shall install openocd into your system.
+
+# Using OpenOCD
+Once OpenOCD is installed, launch it using the following
+```
+$ sudo make openocd
+```
+The terminal may now be minimized as it needs to stay open but cannot be used for anything else.
+In a new terminal window you can use:
+```
+$ make debug 
+```
+
+Once the **gdb** prompt appears use the following gdb commands.
+```
+(gdb) target extended-remote :3333
+(gdb) monitor reset halt
+(gdb) load
+(gdb) monitor reset init
+```
+Set the break points as you like (using the usual gdb commands) and then use:
+```
+(gdb) continue
+```
+This shall start the execution of the code until the break point is hit. 
+
 # Reference
 Below are the links I used to implement repo.
 - https://github.com/martinjaros/tm4c-gcc
 - http://users.ece.utexas.edu/~valvano/arm/
+- http://git.code.sf.net/p/openocd/code
 
 # Version
 1.0.0
 
 # Todos
- - Add OpenOCD support.
  - CMSIS Support.
  
 # License

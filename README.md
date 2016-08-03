@@ -36,7 +36,8 @@ Below are the links I used to implement repo.
  - CMSIS Support.
  
 # License
-- GNU General Public License v3
+- Use with ISC license:
+- http://opensource.org/licenses/ISC
 - **NOTE**: Please follow the terms on the refrences too :)
 
 **Free Software, Hell Yeah! \m/**

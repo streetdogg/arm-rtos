@@ -56,8 +56,11 @@ flash: $(PROJECT).axf
 	@rm -rf $(FLASH_TOOL)
 	@echo "Done! :)"
 
-openocd: $(PROJECT).axf
-	openocd --file /usr/local/share/openocd/scripts/board/ek-lm4f120xl.cfg
+setup_openocd:
+	@.msc/setup_openocd.sh
 
-gdb: $(PROJECT).axf
-	$(ARM_GDB) $(PROJECT).axf
+openocd:
+	@openocd --file /usr/local/share/openocd/scripts/board/ek-lm4f120xl.cfg
+
+debug: $(PROJECT).axf
+	@arm-none-eabi-gdb $(PROJECT).axf

@@ -1,6 +1,5 @@
 # Replace the Project name
 PROJECT = Blink
-ARM_CC = /home/installation/arm/bin/
 
 # ICDI port
 ICDI    = /dev/ttyACM0
@@ -11,7 +10,8 @@ INCLUDE = ./inc/
 LINKER_SCRIPT = ./.msc/scatter.ld
 FLASH   = ./.msc/lm4flash.c
 FLASH_TOOL = lm4flash
-ARM_GDB = /home/installation/arm/bin/arm-none-eabi-gdb
+ARM_GDB = arm-none-eabi-gdb
+ARM_GCC = arm-none-eabi-gcc
 
 
 # Part specific information
@@ -21,9 +21,9 @@ CFLAGS  ?= -mthumb -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=softfp -ffuncti
 LDFLAGS ?= --gc-sections
 
 # Flags
-LIBGCC  := ${shell $(ARM_CC)arm-none-eabi-gcc ${CFLAGS} -print-libgcc-file-name}
-LIBC    := ${shell $(ARM_CC)arm-none-eabi-gcc ${CFLAGS} -print-file-name=libc.a}
-LIBM    := ${shell $(ARM_CC)arm-none-eabi-gcc ${CFLAGS} -print-file-name=libm.a}
+LIBGCC  := ${shell $(ARM_GCC) ${CFLAGS} -print-libgcc-file-name}
+LIBC    := ${shell $(ARM_GCC) ${CFLAGS} -print-file-name=libc.a}
+LIBM    := ${shell $(ARM_GCC) ${CFLAGS} -print-file-name=libm.a}
 
 .PHONY: all clean
 
@@ -36,7 +36,7 @@ clean:
 
 $(PROJECT).axf: $(patsubst %.c, %.o, $(wildcard $(SOURCE)*.c))
 	@echo "Compiling the source ..."
-	@$(ARM_CC)arm-none-eabi-ld ${LDFLAGS} -T $(LINKER_SCRIPT) --entry ResetIntHandler -o $@ $^ ${LIBGCC} ${LIBC} ${LIBM}
+	@arm-none-eabi-ld ${LDFLAGS} -T $(LINKER_SCRIPT) --entry ResetIntHandler -o $@ $^ ${LIBGCC} ${LIBC} ${LIBM}
 	@echo "Doing some house keeping ..."
 	@rm -rf ./*/*.d ./*/*.o
 	@echo "Generated Output: ./$(PROJECT).axf"
@@ -45,7 +45,7 @@ $(PROJECT).axf: $(patsubst %.c, %.o, $(wildcard $(SOURCE)*.c))
 -include $(wildcard *.d)
 
 %.o: %.c
-	@$(ARM_CC)arm-none-eabi-gcc ${CFLAGS} -I$(INCLUDE) -Dgcc -DPART_${PART} -DTARGET_IS_${TARGET} -DUART_BUFFERED -MD -c -o $@ $<
+	@$(ARM_GCC) ${CFLAGS} -I$(INCLUDE) -Dgcc -DPART_${PART} -DTARGET_IS_${TARGET} -DUART_BUFFERED -MD -c -o $@ $<
 	
 flash: $(PROJECT).axf
 	@echo "Building the flash tool ..."
@@ -53,14 +53,11 @@ flash: $(PROJECT).axf
 	@echo "Uploading the Binary to the Board ..."
 	@./$(FLASH_TOOL) -E -S $(ICDI) $(PROJECT).axf
 	@echo "Removing the flash tool"
-	@rm -rf $(FLASH_TOOL)
 	@echo "Done! :)"
 
 setup_openocd:
 	@.msc/setup_openocd.sh
 
-openocd:
+debug: flash
 	@openocd --file /usr/local/share/openocd/scripts/board/ek-lm4f120xl.cfg
 
-debug: $(PROJECT).axf
-	@arm-none-eabi-gdb $(PROJECT).axf

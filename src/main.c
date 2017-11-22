@@ -13,7 +13,7 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
- 
+
  /*
  * Copyright (c) 2017, Piyush Itankar <pitankar@gmail.com>
  *
@@ -29,23 +29,14 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
- 
- #include "device.h"
- 
- #define PORTF_DATA (*((volatile unsigned long *)0x400253FC))
- #define RCGC2      (*((volatile unsigned long *)0x400FE108))
+
+#include "device.h"
 
 int main( void ){
-  RCGC2      |= 0x00000020;
-  GPIO *GPIO_PORT_F = (GPIO *)0x40025000;
-  GPIO_PORT_F->GPIODIR   = 0x0E;
-  GPIO_PORT_F->GPIOPUR   = 0x11;
-  GPIO_PORT_F->GPIODEN   = 0x1F;
-  // Turn the red led on!
-
-  // Fix this
-  PORTF_DATA = 0x02;
+  SYS_CTRL->RCGC2       |= CLK_PORT_F;
+  GPIO_PORT_F->GPIODIR   = GPIO_PIN_2;
+  GPIO_PORT_F->GPIODEN   = GPIO_PIN_2;
+  GPIO_PORT_F->DATA[GPIO_PIN_2] = GPIO_PIN_2;
 
   while(1);
 }
- 

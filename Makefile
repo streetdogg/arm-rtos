@@ -13,7 +13,6 @@ FLASH_TOOL = lm4flash
 ARM_GDB = arm-none-eabi-gdb
 ARM_GCC = arm-none-eabi-gcc
 
-
 # Part specific information
 PART    ?= TM4C123GH6PM
 TARGET  ?= TM4C123_RB1
@@ -60,4 +59,3 @@ setup_openocd:
 
 debug: flash
 	@openocd --file /usr/local/share/openocd/scripts/board/ek-lm4f120xl.cfg
-

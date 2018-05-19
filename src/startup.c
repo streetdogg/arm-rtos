@@ -16,6 +16,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include "system.h"
 
 #define STACK_SIZE 256
 
@@ -36,6 +37,12 @@ void DefaultIntHandler(){
     while(1);
 }
 
+void systick_handler() {
+    // TODO: This needs to be replaced
+    GPIO_PORT_F->DATA[GPIO_PIN_2] = GPIO_PIN_2;
+}
+
+
 static uint32_t stack[STACK_SIZE];
 __attribute__ ((section(".isr_vector"))) void (*const vectors[])() =
 {
@@ -54,7 +61,7 @@ __attribute__ ((section(".isr_vector"))) void (*const vectors[])() =
     DefaultIntHandler,                      // Debug monitor handler
     0,                                      // Reserved
     DefaultIntHandler,                      // The PendSV handler
-    DefaultIntHandler,                      // The SysTick handler
+    systick_handler,                        // The SysTick handler
     DefaultIntHandler,                      // GPIO Port A
     DefaultIntHandler,                      // GPIO Port B
     DefaultIntHandler,                      // GPIO Port C

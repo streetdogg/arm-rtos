@@ -30,13 +30,37 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include "device.h"
+#include "system.h"
 
-int main( void ){
+void thread1 () {
+    for (int i=0; i<= 1000000; i++);
+    GPIO_PORT_F->DATA[GPIO_PIN_1] = GPIO_PIN_1;
+
+    for (int i=0; i<= 1000000; i++);
+    GPIO_PORT_F->DATA[GPIO_PIN_1] = ~GPIO_PIN_1;
+}
+
+void thread2 () {
+    for (int i=0; i<= 1000000; i++);
+    GPIO_PORT_F->DATA[GPIO_PIN_2] = GPIO_PIN_2;
+
+    for (int i=0; i<= 1000000; i++);
+    GPIO_PORT_F->DATA[GPIO_PIN_2] = ~GPIO_PIN_2;
+}
+
+void setup_leds() {
   SYS_CTRL->RCGC2       |= CLK_PORT_F;
   GPIO_PORT_F->GPIODIR   = GPIO_PIN_2;
   GPIO_PORT_F->GPIODEN   = GPIO_PIN_2;
-  GPIO_PORT_F->DATA[GPIO_PIN_2] = GPIO_PIN_2;
+}
 
-  while(1);
+int main( void ){
+  setup_leds();
+  system_init();
+
+//   create_thread(thread1);
+//   create_thread(thread2);
+
+  while(1)
+    __asm("WFI");
 }

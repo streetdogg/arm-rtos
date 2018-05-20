@@ -16,9 +16,10 @@
 
 #include "system.h"
 
-unsigned long int total_tasks = 0;
+volatile unsigned long int total_tasks;
 tcb_ thread_pool[THREAD_POOL_SIZE];
 tcb_ *execution_queue;
+tcb_ *current_thread;
 
 /*
  * Enables all interrupts
@@ -63,19 +64,15 @@ void setup_systick() {
     *(unsigned long int volatile *)0xE000E010 |= 0x07U;
 }
 
-
-void pendsv_handler() {
-    // TODO
-}
-
 /*
  * Initializes the System Correctly
  */
 void system_init() {
-    __asm("CPSID I");
-    // TODO: set_pensv_priority_to_low();
+    dissable_interrupts();
+    set_pensv_priority_to_low();
     setup_systick();
-    __asm("CPSIE I");
+    total_tasks = 0;
+    enable_interrupts();
 }
 
 void add_to_execution_queue(tcb_ *tcb) {
@@ -84,6 +81,8 @@ void add_to_execution_queue(tcb_ *tcb) {
 }
 
 void create_thread(function task) {
+    dissable_interrupts();
+	
     unsigned long int *sp;
     tcb_ *tcb = &thread_pool[total_tasks];  // Get the Next free TCB
 
@@ -99,4 +98,7 @@ void create_thread(function task) {
     tcb->sp = sp;
 
     add_to_execution_queue(tcb);
+    total_tasks ++;
+	
+    enable_interrupts();
 }

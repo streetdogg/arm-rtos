@@ -33,6 +33,8 @@
 #ifndef __REG_NAMES__
 #define __REG_NAMES__
 
+#define NULL ((void *)0x00)
+
 // System Control Register Map
 typedef struct _SYSTEM_CONTROL {
   volatile unsigned long  DID0;

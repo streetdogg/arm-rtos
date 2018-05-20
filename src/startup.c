@@ -21,6 +21,12 @@
 #define STACK_SIZE 256
 
 extern int main();
+extern tcb_ *execution_queue;
+extern tcb_ *current_thread;
+
+unsigned long int current_sp;
+unsigned long int next_sp;
+unsigned long int *sp;
 
 void ResetIntHandler(){
     extern uint32_t _etext, _data, _edata, _bss, _ebss;
@@ -37,9 +43,44 @@ void DefaultIntHandler(){
     while(1);
 }
 
+void pendsv_handler() {
+			tcb_ *next_thread;
+    __asm("CPSID I");
+    __asm("PUSH  {r4-r11}");
+	
+
+    if (current_thread == NULL) {
+        current_thread = execution_queue;
+				current_sp = (unsigned long int)(current_thread->sp);
+        __asm("LDR r10, =current_sp");
+        __asm("LDR sp,[r10,#0x00]");
+			  __asm("POP {r4-r11}");
+        __asm("CPSIE I");
+				return;
+    }
+
+    if (current_thread->next == NULL) {
+        current_thread = execution_queue;
+				current_sp = (unsigned long int)(current_thread->sp);
+        __asm("LDR r10, =current_sp");
+        __asm("LDR sp,[r1,#0x00]");
+    } else {
+        next_thread = current_thread->next;
+				current_sp = (unsigned long int)(current_thread->sp);
+        __asm("LDR r10, =current_sp");
+        __asm("STR sp,[r10,#0x00]");
+				
+				next_sp = (unsigned long int)(next_thread->sp);
+        __asm("LDR r10, =next_sp");
+        __asm("LDR sp,[r10,#0x00]");
+    }
+
+    __asm("POP {r4-r11}");
+    __asm("CPSIE I");
+}
+
 void systick_handler() {
-    // TODO: This needs to be replaced
-    GPIO_PORT_F->DATA[GPIO_PIN_2] = GPIO_PIN_2;
+    set_pendsv();
 }
 
 
@@ -60,7 +101,7 @@ __attribute__ ((section(".isr_vector"))) void (*const vectors[])() =
     DefaultIntHandler,                      // SVCall handler
     DefaultIntHandler,                      // Debug monitor handler
     0,                                      // Reserved
-    DefaultIntHandler,                      // The PendSV handler
+    pendsv_handler,                         // The PendSV handler
     systick_handler,                        // The SysTick handler
     DefaultIntHandler,                      // GPIO Port A
     DefaultIntHandler,                      // GPIO Port B

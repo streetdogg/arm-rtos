@@ -30,10 +30,8 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#ifndef __REG_NAMES__
-#define __REG_NAMES__
-
-#define NULL ((void *)0x00)
+#ifndef __MEM_LAYOUT_H__
+#define __MEM_LAYOUT_H__
 
 // System Control Register Map
 typedef struct _SYSTEM_CONTROL {
@@ -356,7 +354,7 @@ typedef struct _ADC{
 #define CLK_PORT_E 0x10
 #define CLK_PORT_F 0x20
 
-#define GPIO_PORT_F ((GPIO *)0x40025000)
+#define GPIO_PORT_F ((GPIO *) 0x40025000)
 #define SYS_CTRL    ((SYSTEM_CONTROL *)0x400FE000)
 
 #endif

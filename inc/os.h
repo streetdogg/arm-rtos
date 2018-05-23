@@ -14,32 +14,51 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#ifndef __SYSTEM__
-#define __SYSTEM__
+#ifndef __OS_H__
+#define __OS_H__
 
-#include "device.h"
+#include "os_config.h"
+#include "mem_layout.h"
 
-#define TASK_STACK_SIZE         64
-#define THREAD_POOL_SIZE        4
-
-// Prototype for the task
+/*
+ * This is a Prototype for the User threads.
+ * The user thread to be spwaned as thread must be of the type 'void'
+ * and take no arguments.
+ */
 typedef void (*function) ();
 
-// Thread Control Block
+/*
+ * Thread control block.
+ * Includes a dedicated stack, stack_pointer and pointer to
+ * the next thread in the schedule queue.
+ * Each user thread gets it's own thread control block.
+ */
 typedef struct tcb__ {
     unsigned long int stack[TASK_STACK_SIZE];
     unsigned long int *sp;
     struct tcb__ *next;
 } tcb_;
 
+/*
+ * Enables Interrupts and the CPU can attend to the interrupts.
+ */
 void enable_interrupts();
+
+/*
+ * Disables Interrupts and the CPU can not attend to the interrupts.
+ */
 void dissable_interrupts();
-void set_pensv_priority_to_low();
-void systick_handler();
-void pendsv_handler();
-void set_pendsv();
+
+/*
+ * Initializes the CPU.
+ * Configures the System Clock and interrupts
+ */
 void system_init();
-void add_to_execution_queue(tcb_ *tcb);
+
+/*
+ * The 'task' provided as argument will be converted into a thread and
+ * put into the execution queue.
+ */
 void create_thread(function task);
 
 #endif

@@ -36,19 +36,19 @@ Once the setup is complete the source code for OpenOCD will be deleted.
 
 # Source Code
 The Repo is divided into three sub-directories: inc, src and .msc (hidden). As below the 'inc' directory has all the header files (.h), 'src' has all the implementation files (.c) and the '.msc' directory has supporting files like the linker sript (.ld) and the setup script for openOCD.
-.
-├── inc
-│   ├── mem_layout.h
-│   ├── os_config.h
-│   └── os.h
-├── Makefile
-├── .msc
-│   ├── scatter.ld
-│   └── setup_openocd.sh
-├── README.md
-└── src
-    ├── main.c
-    └── os.c
+.<br />
+├── inc<br />
+│   ├── mem_layout.h<br />
+│   ├── os_config.h<br />
+│   └── os.h<br />
+├── Makefile<br />
+├── .msc<br />
+│   ├── scatter.ld<br />
+│   └── setup_openocd.sh<br />
+├── README.md<br />
+└── src<br />
+    ├── main.c<br />
+    └── os.c<br />
 
 It shall help to know that 'main.c' implements three tasks to be executed simultaneously in a preemptive round-robin fashion. These tasks blink the 'Red', 'Blue' and 'Green' on board LED with varying period. The schedular itself is implemented within the 'os.c' file.
 

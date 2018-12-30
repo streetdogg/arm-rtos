@@ -1,61 +1,65 @@
 # Replace the Project name
-PROJECT = Blink
+PROJECT = example
 
 # ICDI port
 ICDI    = /dev/ttyACM0
 
+# OpenOCD specific variables
+OPENOC_CONFIG_FILE =/usr/local/share/openocd/scripts/board/ek-lm4f120xl.cfg
+OPENOC_FILE_UPLOAD ="program $(PROJECT).hex verify reset exit"
+
 # Source code related information
 SOURCE  = ./src/
 INCLUDE = ./inc/
-LINKER_SCRIPT = ./.msc/scatter.ld
-FLASH   = ./.msc/lm4flash.c
-FLASH_TOOL = lm4flash
-ARM_GDB = arm-none-eabi-gdb
-ARM_GCC = arm-none-eabi-gcc
 
-# Part specific information
-PART    ?= TM4C123GH6PM
-TARGET  ?= TM4C123_RB1
-CFLAGS  ?= -mthumb -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=softfp -ffunction-sections -fdata-sections -std=c99 -g -Os -Wall 
-LDFLAGS ?= --gc-sections
+# ARM compilation tools
+ARM_GDB   = arm-none-eabi-gdb
+ARM_GCC   = arm-none-eabi-gcc
+ARM_LD    = arm-none-eabi-ld
+ARM_STRIP = arm-none-eabi-strip
 
-# Flags
-LIBGCC  := ${shell $(ARM_GCC) ${CFLAGS} -print-libgcc-file-name}
-LIBC    := ${shell $(ARM_GCC) ${CFLAGS} -print-file-name=libc.a}
-LIBM    := ${shell $(ARM_GCC) ${CFLAGS} -print-file-name=libm.a}
+# Compilation specific variables
+CFLAGS   ?= -mcpu=cortex-m4 -march=armv7e-m -mthumb -mtune=cortex-m4 
+CFLAGS   += -mno-thumb-interwork -mfloat-abi=softfp -mfpu=fpv4-sp-d16
+CFLAGS   += -ggdb -std=c99 -O1 -I$(INCLUDE) -c -o
+LDSCRIPT = ./.msc/scatter.ld
+LDFLAGS  ?= --gc-sections -T $(LDSCRIPT) --entry reset_handler -o
 
 .PHONY: all clean
 
-all: $(PROJECT).axf
+# Triggers generation of the Final .hex file to be uploaded to the board
+all: $(PROJECT).hex
 
+# Cleans the project
 clean:
-	@echo "Cleaning the Source code ..."
-	@rm -rf ./*/*.d ./*/*.o *.axf
-	@echo "Done! :) "
+	rm -rf ./*/*.d ./*/*.o *.elf *.hex .msc/openocd
 
-$(PROJECT).axf: $(patsubst %.c, %.o, $(wildcard $(SOURCE)*.c))
-	@echo "Compiling the source ..."
-	@arm-none-eabi-ld ${LDFLAGS} -T $(LINKER_SCRIPT) --entry ResetIntHandler -o $@ $^ ${LIBGCC} ${LIBC} ${LIBM}
-	@echo "Doing some house keeping ..."
-	@rm -rf ./*/*.d ./*/*.o
-	@echo "Generated Output: ./$(PROJECT).axf"
-	@echo "Done! :)"
+# Generates the .elf file to be used for debugging
+$(PROJECT)_dbg.elf: $(patsubst %.c, %.o, $(wildcard $(SOURCE)*.c))
+	$(ARM_LD) ${LDFLAGS} $(PROJECT)_dbg.elf $^
+
+# Generates the .hex file from .elf file by stripping the debug symbols
+$(PROJECT).hex: $(PROJECT)_dbg.elf
+	$(ARM_STRIP) -s $(PROJECT)_dbg.elf -o $(PROJECT).hex
 
 -include $(wildcard *.d)
 
+# For every .c file generates a .o file
 %.o: %.c
-	@$(ARM_GCC) ${CFLAGS} -I$(INCLUDE) -Dgcc -DPART_${PART} -DTARGET_IS_${TARGET} -DUART_BUFFERED -MD -c -o $@ $<
-	
-flash: $(PROJECT).axf
-	@echo "Building the flash tool ..."
-	@gcc -Wall $(shell pkg-config --cflags libusb-1.0) $(FLASH) $(shell pkg-config --libs libusb-1.0) -o $(FLASH_TOOL)
-	@echo "Uploading the Binary to the Board ..."
-	@./$(FLASH_TOOL) -E -S $(ICDI) $(PROJECT).axf
-	@echo "Removing the flash tool"
-	@echo "Done! :)"
+	$(ARM_GCC) ${CFLAGS} $@ $<
 
-setup_openocd:
-	@.msc/setup_openocd.sh
+# Uploads the .hex file to the board	
+upload: $(PROJECT).hex
+	sudo openocd --file $(OPENOC_CONFIG_FILE) -c $(OPENOC_FILE_UPLOAD)
 
-debug: flash
-	@openocd --file /usr/local/share/openocd/scripts/board/ek-lm4f120xl.cfg
+# Start a OpenOCD debug server
+openOCD:
+	sudo openocd --file $(OPENOC_CONFIG_FILE)
+
+# Launches the ARM GDB for debugging
+debug:
+	$(ARM_GDB)
+
+# Setup the openOCD environment used for uploading and debugging
+setup:
+	.msc/setup_openocd.sh

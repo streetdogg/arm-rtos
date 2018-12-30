@@ -19,5 +19,7 @@
 
 #define TASK_STACK_SIZE         64
 #define THREAD_POOL_SIZE        10
+#define MAIN_STACK_SIZE         256
+#define NULL                    ((void *) 0x00)
 
 #endif

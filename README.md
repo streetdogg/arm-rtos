@@ -128,7 +128,7 @@ Post this you can issue a reset and allow the execution to continue. The CPU is 
 Below are the links I used for learning the concepts and implementing the source code.
 - Concepts: http://www.state-machine.com/quickstart/
 - Linker Script/Makefile: https://github.com/martinjaros/tm4c-gcc
-- ARM Cortex Inernals: http://users.ece.utexas.edu/~valvano/arm/
+- ARM Cortex Internals: http://users.ece.utexas.edu/~valvano/arm/
 
 # Version
 1.0.1

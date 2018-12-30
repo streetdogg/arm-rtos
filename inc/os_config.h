@@ -1,5 +1,5 @@
  /*
- * Copyright (c) 2017, Piyush Itankar <pitankar@gmail.com>
+ * Copyright (c) 2018, Piyush Itankar <pitankar@gmail.com>
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -17,9 +17,9 @@
 #ifndef __OS_CONFIG_H__
 #define __OS_CONFIG_H__
 
-#define TASK_STACK_SIZE         64
-#define THREAD_POOL_SIZE        10
-#define MAIN_STACK_SIZE         256
-#define NULL                    ((void *) 0x00)
+#define TASK_STACK_SIZE  64
+#define THREAD_POOL_SIZE 10
+#define MAIN_STACK_SIZE  256
+#define NULL             ((void *) 0x00)
 
 #endif

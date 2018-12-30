@@ -1,5 +1,5 @@
  /*
- * Copyright (c) 2017, Piyush Itankar <pitankar@gmail.com>
+ * Copyright (c) 2018, Piyush Itankar <pitankar@gmail.com>
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -146,9 +146,9 @@ void system_init() {
     dissable_interrupts();
     set_pensv_priority_to_low();
     setup_systick_timer();
-	
+
     total_tasks = 0;
-    
+
     enable_interrupts();
 }
 

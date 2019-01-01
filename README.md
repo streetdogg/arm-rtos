@@ -1,4 +1,8 @@
-Implementation of a Round-Robin schedular and generic compilation environment for TM4C123GH6PM. The build system presented here has the minimal possible set of files to get started with TM4C123GH6PM (ARM Cortex M4) the TIVA C Launchpad board by Texas Instruments. The code was tested on Ubuntu 16.04 64 Bit machine. 
+Implementation of a Round-Robin schedular and generic compilation environment for TM4C123GH6PM. As below there are three threads for blinking RED, GREEN and BLUE LED each at different rate.
+
+[![Three Threads one for Each LED](https://img.youtube.com/vi/W4Z3fABs5BY/0.jpg)](https://www.youtube.com/watch?v=W4Z3fABs5BY)
+
+The build system presented here has the minimal possible set of files to get started with TM4C123GH6PM (ARM Cortex M4) the TIVA C Launchpad board by Texas Instruments. The code was tested on Ubuntu 16.04 64 Bit machine.
 
 <hr />
 
@@ -15,7 +19,7 @@ $ cd arm_tools
 $ wget https://armkeil.blob.core.windows.net/developer/Files/downloads/gnu-rm/8-2018q4/gcc-arm-none-eabi-8-2018-q4-major-linux.tar.bz2
 $ tar -xvf gcc-arm-none-eabi-8-2018-q4-major-linux.tar.bz2
 ```
-The tools will be extracted into 'gcc-arm-none-eabi-8-2018-q4-major' directory. 
+The tools will be extracted into 'gcc-arm-none-eabi-8-2018-q4-major' directory.
 
 To enable access to the binaries by the make file execute the following in the terminal you shall use to build the source. Note that you'd need to execute this everytime you build from a new/different terminal. The PATH varible is changed local to the active terminal session.
 
@@ -120,7 +124,7 @@ Post this you can issue a reset and allow the execution to continue. The CPU is 
 <hr />
 
 # Todos
- - Impelment the RMS algorithm to make the OS realtime. 
+ - Impelment the RMS algorithm to make the OS realtime.
  - CMSIS Support.
  - More examples.
 

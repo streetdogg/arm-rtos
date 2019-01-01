@@ -169,7 +169,7 @@ void create_thread(function task) {
     for (int i=0; i <= 13; i++)
         *(--sp) = i;
 
-	*sp =0xDEADBEEF;
+	*sp = 0xDEADBEEF;
 
     // Get the stack pointer for current task
     tcb->sp = sp;

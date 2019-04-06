@@ -34,9 +34,9 @@ typedef void (*function) ();
  * Each user thread gets it's own thread control block.
  */
 typedef struct tcb__ {
-    unsigned long int stack[TASK_STACK_SIZE];
-    unsigned long int *sp;
-    struct tcb__ *next;
+	unsigned long int stack[TASK_STACK_SIZE];
+	unsigned long int *sp;
+	struct tcb__ *next;
 } tcb_;
 
 /*

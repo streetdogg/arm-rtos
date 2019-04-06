@@ -19,47 +19,47 @@
 void thread1 () {
 	while (1){
 		for (int i=0; i<1000000; i++);
-    GPIO_PORT_F->DATA[pin_1] = pin_1;
+			GPIO_PORT_F->DATA[pin_1] = pin_1;
 
 		for (int i=0; i<1000000; i++);
-    GPIO_PORT_F->DATA[pin_1] = ~pin_1;
+			GPIO_PORT_F->DATA[pin_1] = ~pin_1;
 	}
 }
 
 void thread2 () {
 	while (1) {
 		for (int i=0; i<10000000; i++);
-    GPIO_PORT_F->DATA[pin_2] = pin_2;
+			GPIO_PORT_F->DATA[pin_2] = pin_2;
 
 		for (int i=0; i<10000000; i++);
-    GPIO_PORT_F->DATA[pin_2] = ~pin_2;
+			GPIO_PORT_F->DATA[pin_2] = ~pin_2;
 	}
 }
 
 void thread3 () {
 	while (1) {
 		for (int i=0; i<10000; i++);
-    GPIO_PORT_F->DATA[pin_3] = pin_3;
+			GPIO_PORT_F->DATA[pin_3] = pin_3;
 
 		for (int i=0; i<10000; i++);
-    GPIO_PORT_F->DATA[pin_3] = ~pin_3;
+			GPIO_PORT_F->DATA[pin_3] = ~pin_3;
 	}
 }
 
 void setup_leds() {
-  SYS_CTRL->RCGC2       |= clk_port_F;
-  GPIO_PORT_F->GPIODIR   = pin_3|pin_2|pin_1;
-  GPIO_PORT_F->GPIODEN   = pin_3|pin_2|pin_1;
+	SYS_CTRL->RCGC2       |= clk_port_F;
+	GPIO_PORT_F->GPIODIR   = pin_3|pin_2|pin_1;
+	GPIO_PORT_F->GPIODEN   = pin_3|pin_2|pin_1;
 }
 
 int main( void ){
-  setup_leds();
-  system_init();
+	setup_leds();
+	system_init();
 
 	create_thread(thread1);
-  create_thread(thread2);
+	create_thread(thread2);
 	create_thread(thread3);
 
-  while(1)
-    __asm("WFI");
+	while(1)
+		__asm("WFI");
 }

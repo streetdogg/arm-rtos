@@ -337,22 +337,26 @@ typedef struct _ADC{
 } ADC;
 
 // Port Pins
-#define GPIO_PIN_0 0x01
-#define GPIO_PIN_1 0x02
-#define GPIO_PIN_2 0x04
-#define GPIO_PIN_3 0x08
-#define GPIO_PIN_4 0x10
-#define GPIO_PIN_5 0x20
-#define GPIO_PIN_6 0x40
-#define GPIO_PIN_7 0x80
+enum GPIO_PINS {
+  pin_0 = 0x01,
+  pin_1 = 0x02,
+  pin_2 = 0x04,
+  pin_3 = 0x08,
+  pin_4 = 0x10,
+  pin_5 = 0x20,
+  pin_6 = 0x40,
+  pin_7 = 0x80
+};
 
 //  Clock Port
-#define CLK_PORT_A 0x01
-#define CLK_PORT_B 0x02
-#define CLK_PORT_C 0x04
-#define CLK_PORT_D 0x08
-#define CLK_PORT_E 0x10
-#define CLK_PORT_F 0x20
+enum CLK_PORT {
+  clk_port_A = 0x01,
+  clk_port_B = 0x02,
+  clk_port_C = 0x04,
+  clk_port_D = 0x08,
+  clk_port_E = 0x10,
+  clk_port_F = 0x20
+};
 
 #define GPIO_PORT_F ((GPIO *) 0x40025000)
 #define SYS_CTRL    ((SYSTEM_CONTROL *)0x400FE000)

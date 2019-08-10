@@ -41,18 +41,18 @@ Once the setup is complete the source code for OpenOCD will be deleted.
 # Source Code
 The Repo is divided into three sub-directories: inc, src and .msc (hidden). As below the 'inc' directory has all the header files (.h), 'src' has all the implementation files (.c) and the '.msc' directory has supporting files like the linker sript (.ld) and the setup script for openOCD.
 .<br />
-├── inc<br />
+│── inc<br />
 │   ├── mem_layout.h<br />
 │   ├── os_config.h<br />
 │   └── os.h<br />
-├── Makefile<br />
-├── .msc<br />
+│── Makefile<br />
+│── .msc<br />
 │   ├── scatter.ld<br />
 │   └── setup_openocd.sh<br />
-├── README.md<br />
-└── src<br />
-    ├── main.c<br />
-    └── os.c<br />
+│── README.md<br />
+│── src<br />
+│   ├── main.c<br />
+│   └── os.c<br />
 
 It shall help to know that 'main.c' implements three tasks to be executed simultaneously in a preemptive round-robin fashion. These tasks blink the 'Red', 'Blue' and 'Green' on board LED with varying period. The schedular itself is implemented within the 'os.c' file.
 
@@ -135,11 +135,8 @@ Below are the links I used for learning the concepts and implementing the source
 - ARM Cortex Internals: http://users.ece.utexas.edu/~valvano/arm/
 
 # Version
-1.0.1
+1.0.2
 
 # License
-- Use with ISC license:
-- http://opensource.org/licenses/ISC
-- **NOTE**: Please follow the terms on the refrences too :)
-
-**Free Software, Hell Yeah! \m/**
+There were different licences on thevarious sources listed above. Each file has it's own licence. Please follow the terms on the source as well.
+- **NOTE**: This repo was created with an intention to learn the build system and bare-metal programming. The purpose was pure educational adventure. In case you wish to use this repo for any other pusposes, kindly reachout to the refrences listed above and in each file to consult them. Please respect the license terms.

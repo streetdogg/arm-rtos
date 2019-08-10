@@ -15,7 +15,7 @@
  */
 
  /*
- * Copyright (c) 2018, Piyush Itankar <pitankar@gmail.com>
+ * Copyright (c) 2019, Piyush Itankar <pitankar@gmail.com>
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above

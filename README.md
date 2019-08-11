@@ -138,5 +138,5 @@ Below are the links I used for learning the concepts and implementing the source
 1.0.2
 
 # License
-There were different licences on thevarious sources listed above. Each file has it's own licence. Please follow the terms on the source as well.
+There were different licences on the various sources listed above. Each file has it's own licence. Please follow the terms on the source as well.
 - **NOTE**: This repo was created with an intention to learn the build system and bare-metal programming. The purpose was pure educational adventure. In case you wish to use this repo for any other pusposes, kindly reachout to the refrences listed above and in each file to consult them. Please respect the license terms.
